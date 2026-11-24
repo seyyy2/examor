@@ -62,7 +62,7 @@ def set_profile_to_env():
         "CURRENT_ROLE": ('currentRole', ""),
         "CURRENT_MODEL": ('currentModel', ""),
         # OpenAI
-        "OPENAI_MODEL": ('openaiModel', "gpt-3.5-turbo"),
+        "OPENAI_MODEL": ('openaiModel', "gpt-6.2-sol"),
         "OPENAI_API_KEY": ('openaiKey', ""),
         "OPENAI_ORGANIZATION": ('openaiOrganization', ""),
         "OPENAI_BASE": ('openaiBase', "https://api.openai.com"),
