@@ -46,17 +46,26 @@ class LLM:
         )
 
     def _init_openai(self) -> ChatOpenAI:
-        return ChatOpenAI(
-            openai_api_base=os.environ["OPENAI_BASE"]+"/v1",
-            openai_proxy=os.environ['OPENAI_API_PROXY'],
-            model=os.environ["OPENAI_MODEL"],
-            temperature=self.temperature,
-            streaming=self.streaming,
-            callbacks=self.callbacks,
-            max_retries=self.max_retries,
-            max_tokens=self.max_tokens,
-            request_timeout=self.timeout,
-        )
+        model = os.environ["OPENAI_MODEL"]
+        options = {
+            "openai_api_base": os.environ["OPENAI_BASE"] + "/v1",
+            "openai_proxy": os.environ["OPENAI_API_PROXY"],
+            "model": model,
+            "streaming": self.streaming,
+            "callbacks": self.callbacks,
+            "max_retries": self.max_retries,
+            "max_tokens": self.max_tokens,
+            "request_timeout": self.timeout,
+        }
+
+        # GPT-6 reasoning models reject custom temperature values.
+        # Keep the existing role-based temperature behavior for legacy models.
+        if model.startswith(("gpt-6.2-", "gpt-6-")):
+            options["model_kwargs"] = {"reasoning_effort": "low"}
+        else:
+            options["temperature"] = self.temperature
+
+        return ChatOpenAI(**options)
 
     def _init_anthropic(self) -> ChatAnthropic:
         return ChatAnthropic(
