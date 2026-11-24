@@ -33,6 +33,10 @@ type Model =
   | 'claude-2'
   | 'gpt-3.5-turbo'
   | 'gpt-4'
+  | 'gpt-4-1106-preview'
+  | 'gpt-6.2-sol'
+  | 'gpt-6.2-astra'
+  | 'gpt-6-luna'
 
 type Role = 'examiner' | 'teacher' | 'interviewer'
 
@@ -58,7 +62,7 @@ const state: ProfileState = {
       value: 'OpenAI',
     },
     openaiModel: {
-      value: 'gpt-3.5-turbo',
+      value: 'gpt-6.2-sol',
       show: false,
       error: false,
     },
