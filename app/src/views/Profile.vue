@@ -103,17 +103,16 @@
             density="compact"
             :base-color="formData.openaiModel.error ? orangeBgColor : ''"
             :color="formData.openaiModel.error ? orangeBgColor : ''"
-            :items="['gpt-3.5-turbo', 'gpt-4', 'gpt-4-1106-preview']"
+            :items="['gpt-6.2-sol', 'gpt-6.2-astra', 'gpt-6.1-terra', 'gpt-6-luna', 'gpt-3.5-turbo', 'gpt-4', 'gpt-4-1106-preview']"
           />
 
           <!-- OpenAI API KEY -->
           <v-text-field
             v-model="formData.openaiKey.value"
-            class="mt-3"
-            label="KEY"
+            class="mt-3 openai-key-field"
+            label="OPENAI API KEY"
             variant="outlined"
-            density="compact"
-            :counter="51"
+            density="comfortable"
             :append-inner-icon="
               formData.openaiKey.show ? 'mdi-eye' : 'mdi-eye-off'
             "
@@ -134,7 +133,6 @@
             label="ORGANIZATION"
             variant="outlined"
             density="compact"
-            :counter="28"
             :append-inner-icon="
               formData.openaiOrganization.show ? 'mdi-eye' : 'mdi-eye-off'
             "
@@ -394,20 +392,10 @@ const isFormError = computed(() => {
   return false
 })
 
-// Valid key length
-const validFieldLength = (key: ProfileKey, length: number) => {
-  if (formData[key].value && (formData[key].value as string).length !== length)
-    formData[key].error = true
-  else formData[key].error = false
-}
-
+// API key formats and lengths can vary, so do not validate them by a fixed character count.
 watchDeep(formData, () => {
   // If change any form data, set isUpdatedFormData to true
   isUpdatedFormData.value = true
-
-  validFieldLength('openaiKey', 51) // Valid openai key length
-  validFieldLength('openaiOrganization', 28) // Valid openai organization length
-  validFieldLength('azureKey', 32) // Valid azure key length
 
   if (formData.notionKey) PROFILE_STORE.profile.notionKey.error = false
 })

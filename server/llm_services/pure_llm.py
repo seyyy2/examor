@@ -8,8 +8,8 @@ def check_llm_api_state():
     data = response.json()
     headers = response.headers
 
-    if response.status_code != 200 and data["error"]:
-        error_message = data["error"]["message"]
+    if response.status_code != 200:
+        error_message = data.get("error", {}).get("message", response.text)
         raise Exception(f"Error: {error_message}")
 
     return _differentiate_payment_types(headers)
@@ -55,8 +55,13 @@ def _request_chat_openai(
     data = {
         "model": model,
         "messages": [{"role": "system", "content": prompt}],
-        "max_tokens": max_token
     }
+    if model and model.startswith(("gpt-6.2-", "gpt-6-")):
+        # GPT-6 reasoning models do not accept max_tokens or custom temperature.
+        data["max_completion_tokens"] = max(128, max_token)
+        data["reasoning_effort"] = "low"
+    else:
+        data["max_tokens"] = max_token
     return requests.post(
         url=f"{base}/v1/chat/completions",
         headers=headers,
@@ -131,12 +136,8 @@ def _differentiate_payment_types(headers):
     openai_model = os.getenv("OPENAI_MODEL")
 
     if current_model == "OpenAI":
-        if openai_model == "gpt-4":
-            os.environ["PAYMENT"] = "paid"
-        elif headers["x-ratelimit-limit-requests"] == "200":
-            os.environ["PAYMENT"] = "free"
-        else:
-            os.environ["PAYMENT"] = "paid"
+        # OpenAI API usage is metered; rate-limit headers do not indicate a free plan.
+        os.environ["PAYMENT"] = "paid"
 
     # Azure is always paid
     if current_model == "Azure":
