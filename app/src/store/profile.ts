@@ -36,6 +36,7 @@ type Model =
   | 'gpt-4-1106-preview'
   | 'gpt-6.2-sol'
   | 'gpt-6.2-astra'
+  | 'gpt-6.1-terra'
   | 'gpt-6-luna'
 
 type Role = 'examiner' | 'teacher' | 'interviewer'
