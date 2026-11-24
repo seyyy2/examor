@@ -103,7 +103,7 @@
             density="compact"
             :base-color="formData.openaiModel.error ? orangeBgColor : ''"
             :color="formData.openaiModel.error ? orangeBgColor : ''"
-            :items="['gpt-6.2-sol', 'gpt-6.2-astra', 'gpt-6-luna', 'gpt-3.5-turbo', 'gpt-4', 'gpt-4-1106-preview']"
+            :items="['gpt-6.2-sol', 'gpt-6.2-astra', 'gpt-6.1-terra', 'gpt-6-luna', 'gpt-3.5-turbo', 'gpt-4', 'gpt-4-1106-preview']"
           />
 
           <!-- OpenAI API KEY -->
